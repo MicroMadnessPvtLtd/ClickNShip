@@ -2,8 +2,11 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-
+const cors = require('cors');
 require('dotenv/config');
+
+app.use(cors());
+app.options('*', cors());
 
 const api = process.env.API_URL;
 
@@ -25,6 +28,7 @@ app.use(`${api}/users`, usersRoutes);
 mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
     dbName: 'CnSDev0'
 }).then(() => {
     console.log('Database connection established');
