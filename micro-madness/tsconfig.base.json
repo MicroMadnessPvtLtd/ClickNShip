@@ -18,7 +18,8 @@
             "@micro-madness/orders": ["libs/orders/src/index.ts"],
             "@micro-madness/products": ["libs/products/src/index.ts"],
             "@micro-madness/ui": ["libs/ui/src/index.ts"],
-            "@micro-madness/users": ["libs/users/src/index.ts"]
+            "@micro-madness/users": ["libs/users/src/index.ts"],
+            "@env/*": ["environments/*"]
         }
     },
     "exclude": ["node_modules", "tmp"]
