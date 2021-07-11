@@ -41,6 +41,7 @@
         "@nrwl/angular": "12.4.0",
         "bootstrap": "^5.0.0-beta3",
         "font-awesome": "^4.7.0",
+        "i18n-iso-countries": "^6.8.0",
         "normalize.css": "^8.0.1",
         "primeflex": "^2.0.0",
         "primeicons": "^4.1.0",

@@ -36,7 +36,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   onCancel() {
-
+    this.location.back();
   }
 
   onSubmit() {
