@@ -36,7 +36,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
-    dbName: 'CnSDev0'
+    dbName: 'CnSDev'
 }).then(() => {
     console.log('Database connection established');
 }).catch((err) => {

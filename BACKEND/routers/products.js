@@ -41,6 +41,7 @@ router.get(`/`, async (req, res) => {
     if (!productList) {
         res.status(500).json({ success: false });
     }
+    console.log(productList);
     res.send(productList);
 });
 
