@@ -21,6 +21,7 @@ import { EditorModule } from 'primeng/editor';
 import { TagModule } from 'primeng/tag';
 import { AvatarModule } from 'primeng/avatar';
 import { InputMaskModule } from 'primeng/inputmask';
+import { FieldsetModule } from 'primeng/fieldset';
 
 import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
@@ -36,6 +37,8 @@ import { ProductsListComponent } from './pages/products/products-list/products-l
 import { ProductsFormComponent } from './pages/products/products-form/products-form.component';
 import { UsersListComponent } from './pages/users/users-list/users-list.component';
 import { UsersFormComponent } from './pages/users/users-form/users-form.component';
+import { OrdersListComponent } from './pages/orders/orders-list/orders-list.component';
+import { OrdersDetailsComponent } from './pages/orders/orders-details/orders-details.component';
 
 const UX_MODULE = [
     CardModule,
@@ -53,7 +56,8 @@ const UX_MODULE = [
     EditorModule,
     TagModule,
     AvatarModule,
-    InputMaskModule
+    InputMaskModule,
+    FieldsetModule
 ]
 
 const routes: Routes = [
@@ -100,13 +104,21 @@ const routes: Routes = [
             {
                 path: 'users/form/:id',
                 component: UsersFormComponent
+            },
+            {
+                path: 'orders',
+                component: OrdersListComponent
+            },
+            {
+                path: 'orders/:id',
+                component: OrdersDetailsComponent
             }
         ]
     }
 ]
 
 @NgModule({
-    declarations: [AppComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent],
+    declarations: [AppComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent, OrdersListComponent, OrdersDetailsComponent],
     imports: [
         BrowserModule, 
         FormsModule,
