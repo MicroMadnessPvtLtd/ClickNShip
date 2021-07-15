@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { CategoriesService, Product, ProductsService } from '@micro-madness/products';
 import { MessageService } from 'primeng/api';
-import { timer } from 'rxjs';
+import { Subject, timer } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'admin-products-form',
@@ -12,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   styles: [
   ]
 })
-export class ProductsFormComponent implements OnInit {
+export class ProductsFormComponent implements OnInit, OnDestroy {
 
   editMode = false;
   productForm!: FormGroup;
@@ -20,6 +21,7 @@ export class ProductsFormComponent implements OnInit {
   categories: any[] = [];
   imageDisplay: any;
   currentProductId = '';
+  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,6 +35,11 @@ export class ProductsFormComponent implements OnInit {
   ngOnInit(): void {
     this._initForm();
     this._getCategories();
+  }
+
+  ngOnDestroy(): void {
+    this.endsubs$.next();
+    this.endsubs$.complete();
   }
 
   onCancel() {
@@ -88,7 +95,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _getCategories() {
-    this.categoriesService.getCategories().subscribe(categories => {
+    this.categoriesService.getCategories().pipe(takeUntil(this.endsubs$)).subscribe(categories => {
       this.categories = categories;
     })
   }
@@ -99,7 +106,7 @@ export class ProductsFormComponent implements OnInit {
       if (params.id) {
         this.editMode = true;
         this.currentProductId = params.id;
-        this.productsService.getProduct(params.id).subscribe(product => {
+        this.productsService.getProduct(params.id).pipe(takeUntil(this.endsubs$)).subscribe(product => {
           console.log(product);
           this.ProductForm.name.setValue(product.name);
           this.ProductForm.brand.setValue(product.brand);
@@ -119,7 +126,7 @@ export class ProductsFormComponent implements OnInit {
   }
 
   private _saveProduct(productFormData: FormData) {
-    this.productsService.createProduct(productFormData).subscribe(
+    this.productsService.createProduct(productFormData).pipe(takeUntil(this.endsubs$)).subscribe(
       (product: Product) => {
       this.messageService.add(
         {

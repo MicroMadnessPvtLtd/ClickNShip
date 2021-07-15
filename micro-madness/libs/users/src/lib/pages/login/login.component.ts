@@ -1,8 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, LocalstorageService } from '@micro-madness/users';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'users-login',
@@ -10,12 +12,13 @@ import { AuthService, LocalstorageService } from '@micro-madness/users';
   styles: [
   ]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm!: FormGroup;
   isSubmitted = false;
   authError = false;
   authMessage = 'Invalid Email or Password';
+  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -28,6 +31,11 @@ export class LoginComponent implements OnInit {
     this._initLoginFrom();
   }
 
+  ngOnDestroy(): void {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   login() {
     this.isSubmitted = true;
     const loginData = {
@@ -38,7 +46,7 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    this.authService.login(loginData.email, loginData.password).subscribe((user) => {
+    this.authService.login(loginData.email, loginData.password).pipe(takeUntil(this.endsubs$)).subscribe((user) => {
       this.authError = false;
       this.localStorageService.setToken(user.token);
       console.log(user);

@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { UsersService, User } from '@micro-madness/users';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'admin-users-list',
@@ -10,9 +12,10 @@ import { UsersService, User } from '@micro-madness/users';
   styles: [
   ]
 })
-export class UsersListComponent implements OnInit {
+export class UsersListComponent implements OnInit, OnDestroy{
 
   users: User[] = [];
+  endsubs$: Subject<any> = new Subject();
   constructor(
     private usersService: UsersService,
     private messageService: MessageService, 
@@ -22,6 +25,11 @@ export class UsersListComponent implements OnInit {
 
   ngOnInit(): void {
     this._getUsers();
+  }
+
+  ngOnDestroy(): void {
+    this.endsubs$.next();
+    this.endsubs$.complete();
   }
 
   updateUser(userId: string) {
@@ -41,13 +49,13 @@ export class UsersListComponent implements OnInit {
   }
 
   private _getUsers() {
-    this.usersService.getUsers().subscribe(users => {
+    this.usersService.getUsers().pipe(takeUntil(this.endsubs$)).subscribe(users => {
       this.users = users;
     })
   }
 
   private _deleteUser(userId: string) {
-    this.usersService.deleteUser(userId).subscribe(() => {
+    this.usersService.deleteUser(userId).pipe(takeUntil(this.endsubs$)).subscribe(() => {
       this.messageService.add(
         {
           severity:'success', 

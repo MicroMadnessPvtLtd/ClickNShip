@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthGuard, JwtInterceptor, UsersModule } from '@micro-madness/users';
+import { JwtInterceptor, UsersModule } from '@micro-madness/users';
 
 import { CardModule } from 'primeng/card';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -61,71 +61,13 @@ const UX_MODULE = [
     FieldsetModule
 ]
 
-const routes: Routes = [
-    {
-        path: '',
-        component: ShellComponent,
-        canActivate: [AuthGuard],
-        children: [
-            {
-                path: 'dashboard',
-                component: DashboardComponent
-            },
-            {
-                path: 'categories',
-                component: CategoriesListComponent
-            },
-            {
-                path: 'categories/form',
-                component: CategoriesFormComponent
-            },
-            {
-                path: 'categories/form/:id',
-                component: CategoriesFormComponent
-            },
-            {
-                path: 'products',
-                component: ProductsListComponent
-            },
-            {
-                path: 'products/form',
-                component: ProductsFormComponent
-            },
-            {
-                path: 'products/form/:id',
-                component: ProductsFormComponent
-            },
-            {
-                path: 'users',
-                component: UsersListComponent
-            },
-            {
-                path: 'users/form',
-                component: UsersFormComponent
-            },
-            {
-                path: 'users/form/:id',
-                component: UsersFormComponent
-            },
-            {
-                path: 'orders',
-                component: OrdersListComponent
-            },
-            {
-                path: 'orders/:id',
-                component: OrdersDetailsComponent
-            }
-        ]
-    }
-]
-
 @NgModule({
     declarations: [AppComponent, DashboardComponent, ShellComponent, SidebarComponent, CategoriesListComponent, CategoriesFormComponent, ProductsListComponent, ProductsFormComponent, UsersListComponent, UsersFormComponent, OrdersListComponent, OrdersDetailsComponent],
     imports: [
         BrowserModule, 
         FormsModule,
         ReactiveFormsModule,
-        RouterModule.forRoot(routes, { initialNavigation: 'enabled' }), 
+        AppRoutingModule, 
         HttpClientModule,
         BrowserAnimationsModule,
         UsersModule,

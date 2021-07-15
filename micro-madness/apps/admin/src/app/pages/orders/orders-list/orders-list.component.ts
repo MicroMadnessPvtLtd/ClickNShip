@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { OrdersService, Order } from '@micro-madness/orders';
 import { ORDER_STATUS } from '../order.constants';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'admin-orders-list',
@@ -10,10 +12,11 @@ import { ORDER_STATUS } from '../order.constants';
   styles: [
   ]
 })
-export class OrdersListComponent implements OnInit {
+export class OrdersListComponent implements OnInit, OnDestroy{
 
   orders : Order[] = [];
   orderStatus : any = ORDER_STATUS;
+  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private ordersService: OrdersService, 
@@ -26,6 +29,11 @@ export class OrdersListComponent implements OnInit {
     this._getOrders();
   }
 
+  ngOnDestroy(): void {
+    this.endsubs$.next();
+    this.endsubs$.complete();
+  }
+
   showOrder(orderId: string) {
     this.router.navigateByUrl(`orders/${orderId}`);
   }
@@ -36,7 +44,7 @@ export class OrdersListComponent implements OnInit {
       header: 'Delete Order',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.ordersService.deleteOrder(orderId).subscribe(
+        this.ordersService.deleteOrder(orderId).pipe(takeUntil(this.endsubs$)).subscribe(
           () => {
             this._getOrders();
             this.messageService.add({
@@ -58,7 +66,7 @@ export class OrdersListComponent implements OnInit {
   }
 
   private _getOrders() {
-    this.ordersService.getOrders().subscribe(orders => {
+    this.ordersService.getOrders().pipe(takeUntil(this.endsubs$)).subscribe(orders => {
       this.orders = orders;
     })
   }
