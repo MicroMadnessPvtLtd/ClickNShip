@@ -1,0 +1,22 @@
+header {
+    margin-bottom: 25px;
+    .logo {
+        img {
+            width: 145px;
+            cursor: pointer;
+        }
+    }
+    .search {
+        padding-top: 62px;
+    }
+    .navigation {
+        padding-top: 64px;
+    }
+    .tools {
+        padding-top: 64px;
+        
+        .pi {
+            margin-right: 10px;
+        }
+    }
+}
