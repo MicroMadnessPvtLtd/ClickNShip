@@ -1,11 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CategoriesService, Category } from '@micro-madness/products';
 import { MessageService } from 'primeng/api';
-import { Subject, timer } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -14,13 +13,12 @@ import { takeUntil } from 'rxjs/operators';
   styles: [
   ]
 })
-export class CategoriesFormComponent implements OnInit, OnDestroy {
+export class CategoriesFormComponent implements OnInit {
 
   categoryForm!: FormGroup;
   isSubmitted = false;
   editMode = false;
   currentCategoryId = '';
-  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private formBuilder: FormBuilder, 
@@ -38,11 +36,6 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
     })
 
     this._checkEditMode();
-  }
-
-  ngOnDestroy(): void {
-    this.endsubs$.next();
-    this.endsubs$.complete();
   }
 
   onSubmit() {
@@ -68,7 +61,7 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
   }
 
   private _checkEditMode() {
-    this.route.params.pipe(takeUntil(this.endsubs$)).subscribe(params => {
+    this.route.params.subscribe(params => {
       if (params.id) {
         this.editMode = true;
         this.currentCategoryId = params.id;
@@ -82,7 +75,7 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
   }
 
   private _createCategory(category: Category) {
-    this.categoriesService.createCategory(category).pipe(takeUntil(this.endsubs$)).subscribe(
+    this.categoriesService.createCategory(category).subscribe(
       (category: Category) => {
       this.messageService.add(
         {
@@ -106,7 +99,7 @@ export class CategoriesFormComponent implements OnInit, OnDestroy {
   }
 
   private _updateCategory(category: Category) {
-    this.categoriesService.updateCategory(category).pipe(takeUntil(this.endsubs$)).subscribe(
+    this.categoriesService.updateCategory(category).subscribe(
       (category: Category) => {
       this.messageService.add(
         {

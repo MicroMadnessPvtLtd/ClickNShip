@@ -1,11 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { CategoriesService, Product, ProductsService } from '@micro-madness/products';
 import { MessageService } from 'primeng/api';
-import { Subject, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'admin-products-form',
@@ -13,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
   styles: [
   ]
 })
-export class ProductsFormComponent implements OnInit, OnDestroy {
+export class ProductsFormComponent implements OnInit {
 
   editMode = false;
   productForm!: FormGroup;
@@ -21,7 +20,6 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
   categories: any[] = [];
   imageDisplay: any;
   currentProductId = '';
-  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,11 +33,6 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this._initForm();
     this._getCategories();
-  }
-
-  ngOnDestroy(): void {
-    this.endsubs$.next();
-    this.endsubs$.complete();
   }
 
   onCancel() {
@@ -95,7 +88,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
   }
 
   private _getCategories() {
-    this.categoriesService.getCategories().pipe(takeUntil(this.endsubs$)).subscribe(categories => {
+    this.categoriesService.getCategories().subscribe(categories => {
       this.categories = categories;
     })
   }
@@ -106,7 +99,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
       if (params.id) {
         this.editMode = true;
         this.currentProductId = params.id;
-        this.productsService.getProduct(params.id).pipe(takeUntil(this.endsubs$)).subscribe(product => {
+        this.productsService.getProduct(params.id).subscribe(product => {
           console.log(product);
           this.ProductForm.name.setValue(product.name);
           this.ProductForm.brand.setValue(product.brand);
@@ -126,7 +119,7 @@ export class ProductsFormComponent implements OnInit, OnDestroy {
   }
 
   private _saveProduct(productFormData: FormData) {
-    this.productsService.createProduct(productFormData).pipe(takeUntil(this.endsubs$)).subscribe(
+    this.productsService.createProduct(productFormData).subscribe(
       (product: Product) => {
       this.messageService.add(
         {

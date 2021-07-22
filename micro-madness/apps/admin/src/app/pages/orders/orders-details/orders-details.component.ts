@@ -1,10 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrdersService, Order } from '@micro-madness/orders';
 import { ORDER_STATUS } from '../order.constants';
 import { MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'admin-orders-details',
@@ -12,13 +10,12 @@ import { takeUntil } from 'rxjs/operators';
   styles: [
   ]
 })
-export class OrdersDetailsComponent implements OnInit, OnDestroy{
+export class OrdersDetailsComponent implements OnInit{
   order!: Order;
   orderId = '';
   address = '';
   orderStatuses = [];
   selectedStatus: any;
-  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private ordersService: OrdersService,
@@ -32,17 +29,12 @@ export class OrdersDetailsComponent implements OnInit, OnDestroy{
     this._getOrder();
   }
 
-  ngOnDestroy(): void {
-    this.endsubs$.next();
-    this.endsubs$.complete();
-  }
-
   getMultipliedValue(price: any, quantity: any) {
     return price * quantity;
   }
 
   onStatusChange(event: any) {
-    this.ordersService.updateOrder({status: event.value}, this.orderId).pipe(takeUntil(this.endsubs$)).subscribe(order => {
+    this.ordersService.updateOrder({status: event.value}, this.orderId).subscribe(order => {
       this.order = order;
       this.selectedStatus = order.status;
       this.messageService.add(
@@ -65,7 +57,7 @@ export class OrdersDetailsComponent implements OnInit, OnDestroy{
 
   private _getOrder() {
     if (this.orderId !== '') {
-      this.ordersService.getOrder(this.orderId).pipe(takeUntil(this.endsubs$)).subscribe(order => {
+      this.ordersService.getOrder(this.orderId).subscribe(order => {
         this.order = order;
         this.selectedStatus = order.status;
         console.log(this.order);

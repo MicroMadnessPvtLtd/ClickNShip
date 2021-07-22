@@ -1,12 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UsersService, User } from '@micro-madness/users';
 import { MessageService } from 'primeng/api';
-import { Subject, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import * as countriesLib from 'i18n-iso-countries';
-import { takeUntil } from 'rxjs/operators';
 
 declare const require : any;
 
@@ -15,14 +14,13 @@ declare const require : any;
   templateUrl: './users-form.component.html',
   styles: []
 })
-export class UsersFormComponent implements OnInit, OnDestroy{
+export class UsersFormComponent implements OnInit {
   form!: FormGroup;
   isSubmitted = false;
   editmode = false;
   currentUserId!: string;
   countries: any[] = [];
   disabled = true;
-  endsubs$: Subject<any> = new Subject();
 
   constructor(
     private messageService: MessageService,
@@ -36,11 +34,6 @@ export class UsersFormComponent implements OnInit, OnDestroy{
     this._initUserForm();
     this._getCountries();
     this._checkEditMode();
-  }
-
-  ngOnDestroy(): void {
-    this.endsubs$.next();
-    this.endsubs$.complete();
   }
 
   private _initUserForm() {
@@ -60,7 +53,7 @@ export class UsersFormComponent implements OnInit, OnDestroy{
   }
 
   private _addUser(user: User) {
-    this.usersService.createUser(user).pipe(takeUntil(this.endsubs$)).subscribe(
+    this.usersService.createUser(user).subscribe(
       (user: User) => {
         this.messageService.add({
           severity: 'success',
@@ -84,7 +77,7 @@ export class UsersFormComponent implements OnInit, OnDestroy{
   }
 
   private _updateUser(user: User) {
-    this.usersService.updateUser(user).pipe(takeUntil(this.endsubs$)).subscribe(
+    this.usersService.updateUser(user).subscribe(
       () => {
         this.messageService.add({
           severity: 'success',
@@ -108,7 +101,7 @@ export class UsersFormComponent implements OnInit, OnDestroy{
   }
 
   private _checkEditMode() {
-    this.route.params.pipe(takeUntil(this.endsubs$)).subscribe((params) => {
+    this.route.params.subscribe((params) => {
       if (params.id) {
         this.editmode = true;
         this.currentUserId = params.id;

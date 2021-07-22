@@ -1,7 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product, ProductsService } from '@micro-madness/products';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'products-featured-products',
@@ -9,11 +7,10 @@ import { takeUntil } from 'rxjs/operators';
   styles: [
   ]
 })
-export class FeaturedProductsComponent implements OnInit, OnDestroy {
+export class FeaturedProductsComponent implements OnInit {
 
   count = 4;
   featuredProducts: Product[] = [];
-  endsubs$: Subject<any> = new Subject();
 
   constructor(private productsService: ProductsService) { }
 
@@ -21,13 +18,8 @@ export class FeaturedProductsComponent implements OnInit, OnDestroy {
     this._getFeaturedProducts();
   }
 
-  ngOnDestroy(): void {
-    this.endsubs$.next();
-    this.endsubs$.complete();
-  }
-
   private _getFeaturedProducts(): void {
-    this.productsService.getFeaturedProductsCount(this.count).pipe(takeUntil(this.endsubs$)).subscribe((products) => {
+    this.productsService.getFeaturedProductsCount(this.count).subscribe((products) => {
       this.featuredProducts = products;
     }, (err) => {
       console.log(err);

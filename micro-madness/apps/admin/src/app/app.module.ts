@@ -67,10 +67,10 @@ const UX_MODULE = [
         BrowserModule, 
         FormsModule,
         ReactiveFormsModule,
-        AppRoutingModule, 
         HttpClientModule,
         BrowserAnimationsModule,
         UsersModule,
+        AppRoutingModule, 
         ...UX_MODULE
     ],
     providers: [MessageService, ConfirmationService, {

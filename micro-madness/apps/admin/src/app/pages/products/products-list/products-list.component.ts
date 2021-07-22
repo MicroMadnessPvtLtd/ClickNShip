@@ -1,18 +1,15 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductsService, Product } from '@micro-madness/products';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'admin-products-list',
     templateUrl: './products-list.component.html',
     styles: []
 })
-export class ProductsListComponent implements OnInit, OnDestroy{
+export class ProductsListComponent implements OnInit{
     products: Product[] = [];
-    endsubs$: Subject<any> = new Subject();
 
     constructor(
       private productsService: ProductsService, 
@@ -25,10 +22,6 @@ export class ProductsListComponent implements OnInit, OnDestroy{
         this.getProducts();
     }
 
-    ngOnDestroy(): void {
-      this.endsubs$.next();
-      this.endsubs$.complete();
-    }
 
     updateProduct(productId: string) {
         this.router.navigateByUrl(`products/form/${productId}`);
@@ -47,14 +40,14 @@ export class ProductsListComponent implements OnInit, OnDestroy{
     }
 
     getProducts() {
-        this.productsService.getProducts().pipe(takeUntil(this.endsubs$)).subscribe((prods) => {
+        this.productsService.getProducts().subscribe((prods) => {
             console.log(prods);
             this.products = prods;
         });
     }
 
     private _deleteProduct(productId: string) {
-      this.productsService.deleteProduct(productId).pipe(takeUntil(this.endsubs$)).subscribe(() => {
+      this.productsService.deleteProduct(productId).subscribe(() => {
         this.messageService.add(
           {
             severity:'success', 
