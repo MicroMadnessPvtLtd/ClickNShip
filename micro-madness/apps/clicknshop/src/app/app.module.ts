@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { UiModule } from '@micro-madness/ui';
 import { ProductsModule } from '@micro-madness/products';
+import { OrdersModule } from '@micro-madness/orders';
 import { AccordionModule } from 'primeng/accordion';
 
 import { AppComponent } from './app.component';
@@ -28,6 +29,7 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     UiModule,
     ProductsModule,
+    OrdersModule,
     AccordionModule
   ],
   providers: [],
