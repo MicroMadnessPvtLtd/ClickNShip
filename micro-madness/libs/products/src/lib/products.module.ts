@@ -6,6 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RatingModule } from 'primeng/rating';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 import { UiModule } from '@micro-madness/ui';
 
@@ -41,7 +43,8 @@ const routes: Routes = [
       CheckboxModule,
       RatingModule,
       InputNumberModule,
-      UiModule
+      UiModule,
+      ToastModule
     ],
     declarations: [
       ProductSearchComponent,
@@ -58,6 +61,7 @@ const routes: Routes = [
       FeaturedProductsComponent,
       ProductsListComponent,
       ProductDetailsComponent
-    ]
+    ],
+    providers: [MessageService]
 })
 export class ProductsModule {}
