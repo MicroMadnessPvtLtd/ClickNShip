@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="product-details" *ngIf="product">
     <div class="p-grid">
         <div class="p-col-6">
@@ -18,7 +19,7 @@
             <div class="product-quantity">
                 <div class="p-field p-col-12 p-md-3 p-p-0">
                     <label for="quantity">Quantity</label>
-                    <p-inputNumber [(ngModel)]="quantity" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100">
+                    <p-inputNumber [(ngModel)]="quantity" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="1" [max]="countInStock">
                     </p-inputNumber>
                 </div>
             </div>
@@ -36,7 +37,7 @@
                     type="button"
                     label="Add to Cart"
                     class="p-button-rounded p-mr-2"
-                    (onClick) = "addProductToCart()"
+                    (click) = "addProductToCart()"
                 ></button>
             </div>
         </div>
