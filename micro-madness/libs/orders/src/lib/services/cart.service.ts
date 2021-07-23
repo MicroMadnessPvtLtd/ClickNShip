@@ -11,11 +11,14 @@ export class CartService {
   constructor() { }
 
   initCartLocalStorage() {
-    const initialCart = {
-      items: []
-    };
-    const stringifiedInitialCart = JSON.stringify(initialCart)
-    localStorage.setItem(CART_KEY, stringifiedInitialCart);
+    const cart: Cart = this.getCart();
+    if (!cart) {
+      const initialCart = {
+        items: []
+      };
+      const stringifiedInitialCart = JSON.stringify(initialCart)
+      localStorage.setItem(CART_KEY, stringifiedInitialCart);
+    }
   }
 
   getCart() : Cart {
