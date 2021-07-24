@@ -60,7 +60,6 @@ export class OrdersDetailsComponent implements OnInit{
       this.ordersService.getOrder(this.orderId).subscribe(order => {
         this.order = order;
         this.selectedStatus = order.status;
-        console.log(this.order);
         this.address = `${order.shippingAddress1}, <br /> ${order.shippingAddress2}, <br /> ${order.city}, <br /> Zip: ${order.zip}, ${order.country}`;    
       })
     }
