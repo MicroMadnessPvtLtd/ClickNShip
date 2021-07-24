@@ -4,6 +4,7 @@ import { Order } from '../models/order';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '@env/environment';
+import { Product } from '../models/product';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +41,9 @@ export class OrdersService {
     return this.http
       .get<number>(`${this.apiUrlPrefix}orders/get/totalsales`)
       .pipe(map((objectValue: any) => objectValue.totalsales));
+  }
+
+  getProduct(productId: string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrlPrefix}products/${productId}`);
   }
 }
