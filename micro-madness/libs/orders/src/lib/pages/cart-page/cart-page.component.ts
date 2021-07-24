@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CartService } from '@micro-madness/orders';
+import { ProductsService } from '@micro-madness/products';
 
 @Component({
   selector: 'orders-cart-page',
@@ -9,9 +11,10 @@ import { Router } from '@angular/router';
 })
 export class CartPageComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private cartService: CartService, private productsService: ProductsService) { }
 
   ngOnInit(): void {
+    this._getCartDetails();
   }
 
 
@@ -20,6 +23,15 @@ export class CartPageComponent implements OnInit {
   }
 
   deleteCartItem() {
-    
+  }
+
+  private _getCartDetails() {
+    this.cartService.cart$.pipe().subscribe((resp) => {
+      resp.items?.forEach(cartItem => {
+        this.productsService.getProduct(cartItem.productId).subscribe((product) => {
+          console.log(product);
+        })
+      })
+    })
   }
 }
