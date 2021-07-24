@@ -9,6 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CartService } from './services/cart.service';
 import { CartIconComponent } from './components/cart-icon/cart-icon.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
+import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 
 const routes: Routes = [
   {
@@ -27,11 +28,13 @@ const routes: Routes = [
     ],
     declarations: [
       CartIconComponent,
-      CartPageComponent
+      CartPageComponent,
+      OrderSummaryComponent
     ],
     exports: [
       CartIconComponent,
-      CartPageComponent
+      CartPageComponent,
+      OrderSummaryComponent
     ]
 })
 export class OrdersModule {
