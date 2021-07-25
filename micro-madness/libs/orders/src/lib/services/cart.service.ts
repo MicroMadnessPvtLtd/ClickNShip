@@ -32,13 +32,17 @@ export class CartService {
     return cart;
   }
 
-  setCartItem(cartItem: CartItem) : Cart {
+  setCartItem(cartItem: CartItem, updateCartItem?:boolean) : Cart {
     const cart: Cart = this.getCart();
     const cartItemExists = cart.items?.find((item) => item.productId === cartItem.productId);
     if (cartItemExists) {
       cart?.items?.map((item) => {
         if (item.productId === cartItem.productId) {
-          item.quantity = item?.quantity + cartItem?.quantity;
+          if (updateCartItem) {
+            item.quantity = cartItem.quantity;
+          } else {
+            item.quantity = item?.quantity + cartItem?.quantity;
+          }
         }
       });
     } else {

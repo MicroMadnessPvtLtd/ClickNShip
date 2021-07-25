@@ -33,12 +33,20 @@
                     </div>
                     <div class="p-col-3">
                         <div class="p-field p-fluid cart-item-quantity">
-                            <p-inputNumber mode="decimal" [showButtons]="true" inputId="item.product.id" [min]="1" [max]="item.product.countInStock">
+                            <p-inputNumber 
+                                mode="decimal" 
+                                [showButtons]="true" 
+                                [inputId]="item.product.id" 
+                                [min]="1" 
+                                [max]="item.product.countInStock"
+                                [(ngModel)] = "item.quantity > item.product.countInStock ? item.product.countInStock : item.quantity"
+                                (onInput)="updateCartItemQuantity($event, item)"
+                            >
                             </p-inputNumber>
                         </div>
                         <div class="cart-item-subtotal">
                             Subtotal:
-                            <span class="cart-item-subtotal-value">{{ item.product.price * item.quantity | currency:"&#8377;"}}</span>
+                            <span class="cart-item-subtotal-value">{{ item.quantity > item.product.countInStock ? (item.product.price * item.product.countInStock | currency:"&#8377;") : (item.product.price * item.quantity | currency:"&#8377;") }}</span>
                         </div>
                     </div>
                 </div>

@@ -26,17 +26,19 @@ export class OrderSummaryComponent implements OnInit, OnDestroy {
   }
 
   private _getOrderSummary() {
-    this.cartService.cart$.pipe(takeUntil(this.endsubs$)).subscribe((resp) => {
-      if (resp) {
-        resp.items?.map((item) => {
-          this.ordersService.getProduct(item.productId ?? '')
-          .pipe(take(1))
-          .subscribe((product) => {
-            this.totalPrice += product.price * item.quantity;
-          });
-        })
+    this.cartService.cart$.pipe(takeUntil(this.endsubs$)).subscribe((cart) => {
+      this.totalPrice = 0;
+      if (cart) {
+        cart.items.map((item) => {
+          this.ordersService
+            .getProduct(item.productId)
+            .pipe(take(1))
+            .subscribe((product) => {
+              this.totalPrice += product.price * item.quantity;
+            });
+        });
       }
-    })
+    });
   }
 
 }
