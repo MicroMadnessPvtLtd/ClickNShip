@@ -10,6 +10,7 @@ import { CartService } from './services/cart.service';
 import { CartIconComponent } from './components/cart-icon/cart-icon.component';
 import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {
@@ -24,7 +25,8 @@ const routes: Routes = [
       RouterModule.forChild(routes),
       BadgeModule,
       ButtonModule,
-      InputNumberModule
+      InputNumberModule,
+      FormsModule
     ],
     declarations: [
       CartIconComponent,
