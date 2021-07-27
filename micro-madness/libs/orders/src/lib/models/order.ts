@@ -7,11 +7,12 @@ export class Order {
   shippingAddress1?: string;
   shippingAddress2?: string;
   city?: string;
+  state?: string;
   zip?: string;
   country?: string;
   phone?: string;
   status?: number;
   totalPrice?: string;
-  user?: User;
+  user?: any;
   dateOrdered?: string;
 }

@@ -1,6 +1,5 @@
-import { Product } from '@micro-madness/products';
 export class OrderItem {
-    product?: Product;
+    product?: any;
     quantity?: number;
   }
   
