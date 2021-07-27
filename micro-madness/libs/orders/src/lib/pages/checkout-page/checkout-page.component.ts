@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { OrderItem } from '@micro-madness/orders';
-import { UsersService } from '@micro-madness/users';
+import { Cart, CartService, Order, OrderItem, OrdersService, ORDER_STATUS } from '@micro-madness/orders';
 import * as countriesLib from 'i18n-iso-countries';
 
 declare const require : any;
@@ -17,16 +16,19 @@ export class CheckoutPageComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private cartService: CartService,
+    private ordersService: OrdersService
   ) {}
   checkoutFormGroup!: FormGroup;
   isSubmitted = false;
   orderItems: OrderItem[] = [];
-  userId!: string;
+  userId = '609d65943373711346c5e950';
   countries: any[] = [];
 
   ngOnInit(): void {
     this._initCheckoutForm();
+    this._getCartItems();
     this._getCountries();
   }
 
@@ -43,6 +45,16 @@ export class CheckoutPageComponent implements OnInit {
     });
   }
 
+  private _getCartItems() {
+    const cart: Cart= this.cartService.getCart();
+    this.orderItems = cart.items?.map((item) => {
+      return {
+        product: item.productId,
+        quantity: item.quantity
+      };
+    });
+  }
+
   backToCartPage() {
     this.router.navigate(['/cart']);
   }
@@ -52,6 +64,25 @@ export class CheckoutPageComponent implements OnInit {
     if (this.checkoutFormGroup.invalid) {
       return;
     }
+
+    const order: Order = {
+      orderItems: this.orderItems,
+      shippingAddress1: this.checkoutForm.street.value,
+      shippingAddress2: this.checkoutForm.apartment.value,
+      city: this.checkoutForm.city.value,
+      state: 'TN',
+      zip: this.checkoutForm.zip.value,
+      country: this.checkoutForm.country.value,
+      phone: this.checkoutForm.phone.value,
+      status: 0,
+      user: this.userId,
+      dateOrdered: `${Date.now()}`
+    }
+    
+    this.ordersService.createOrder(order).subscribe(() => {
+      // redirect to thank you page
+      console.log('Saved Successfully');
+    })
   }
 
   private _getCountries() {

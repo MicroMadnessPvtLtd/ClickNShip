@@ -9,3 +9,6 @@ export * from './lib/models/order';
 export * from './lib/models/order-item';
 export * from './lib/models/cart';
 export * from './lib/models/product';
+
+/* Constants */
+export * from './lib/order.constants';
