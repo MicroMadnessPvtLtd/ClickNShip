@@ -16,6 +16,7 @@ import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
+import { ThankYouComponent } from './pages/thank-you/thank-you.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutPageComponent
+  },
+  {
+    path: 'success',
+    component: ThankYouComponent
   }
 ]
 
@@ -45,13 +50,15 @@ const routes: Routes = [
       CartIconComponent,
       CartPageComponent,
       OrderSummaryComponent,
-      CheckoutPageComponent
+      CheckoutPageComponent,
+      ThankYouComponent
     ],
     exports: [
       CartIconComponent,
       CartPageComponent,
       OrderSummaryComponent,
-      CheckoutPageComponent
+      CheckoutPageComponent,
+      ThankYouComponent
     ]
 })
 export class OrdersModule {
